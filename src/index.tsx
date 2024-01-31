@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {App} from './components/App'
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import About from "@/pages/About";
 
 const root = ReactDOM.createRoot(
 	document.getElementById('root') as HTMLElement
@@ -14,7 +15,7 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: "/about",
-				element: <div>about</div>,
+				element: <About/>,
 			}
 		]
 	},
