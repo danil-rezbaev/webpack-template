@@ -2,13 +2,14 @@ import jpg from '@/assets/jpg.jpg';
 import png from '@/assets/png.png';
 import Svg from '@/assets/svg.svg';
 
+// this code not used, so in build doesn't exist
 function log (value: number) {
 	console.log(value)
 }
 
 const About = () => {
 	return (
-		<div>
+		<div id="123" data-testid="test-3123">
 			<img src={jpg} width={100} alt=""/>
 			<img src={png} width={100} alt=""/>
 			{/*<img src={jpg} width={100} alt=""/>*/}

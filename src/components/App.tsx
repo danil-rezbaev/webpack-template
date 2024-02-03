@@ -1,4 +1,4 @@
-import {Suspense, useState} from 'react';
+import {Suspense, useEffect, useState} from 'react';
 import css from './App.module.scss';
 import {Outlet} from "react-router-dom";
 
@@ -20,6 +20,16 @@ export const App = ()  => {
 	// 		</div>
 	// 	)
 	// }
+
+	console.log(1)
+
+	useEffect(() => {
+		console.log(2)
+
+		return () => {
+			console.log(3)
+		}
+	}, []);
 
 	return (
 		<div>

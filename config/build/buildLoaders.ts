@@ -2,6 +2,7 @@ import { ModuleOptions } from "webpack";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import {BuildOptions} from "./types";
 import ReactRefreshTypescript from "react-refresh-typescript";
+import {removeDataTestIdBabelPlugin} from "./plugins/removeDataTestIdBabelPlugin";
 
 export function buildLoaders(options: BuildOptions): ModuleOptions['rules'] {
 	const isDev = options.mode === 'development';
@@ -26,18 +27,6 @@ export function buildLoaders(options: BuildOptions): ModuleOptions['rules'] {
 			"sass-loader",
 		],
 	};
-
-	const tsLoader = {
-		test: /\.tsx?$/,
-		loader: 'ts-loader',
-		exclude: /node_modules/,
-		options: {
-			transpileOnly: true,
-			getCustomTransformers: () => ({
-				before: [isDev && ReactRefreshTypescript()].filter(Boolean)
-			})
-		}
-	}
 
 	const assetsLoader = {
 		test: /\.(png|jpg|jpeg|gif)$/i,
@@ -66,9 +55,49 @@ export function buildLoaders(options: BuildOptions): ModuleOptions['rules'] {
 		],
 	}
 
+	const tsLoader = {
+		test: /\.tsx?$/,
+		loader: 'ts-loader',
+		exclude: /node_modules/,
+		options: {
+			transpileOnly: true,
+			getCustomTransformers: () => ({
+				before: [isDev && ReactRefreshTypescript()].filter(Boolean)
+			})
+		}
+	}
+
+	const babelLoader = {
+		test: /\.tsx?$/,
+		exclude: /node_modules/,
+		use: {
+			loader: "babel-loader",
+			options: {
+				presets: [
+					'@babel/preset-env',
+					'@babel/preset-typescript',
+					['@babel/preset-react',
+						{
+							runtime: isDev ? 'automatic' : 'classic',
+						},
+					],
+				],
+				plugins: [
+					isDev && [
+						removeDataTestIdBabelPlugin,
+						{
+							props: ['data-testid']
+						}
+					]
+				].filter(Boolean)
+			},
+		}
+	}
+
 	return [
 		sassLoader,
-		tsLoader,
+		// tsLoader,
+		babelLoader,
 		svgLoader,
 		assetsLoader,
 	]
